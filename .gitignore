@@ -2,3 +2,6 @@
 data.sqlite3*
 tracker.log
 __pycache__/
+
+# docker runtime data
+data/

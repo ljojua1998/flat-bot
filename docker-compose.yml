@@ -1,0 +1,15 @@
+# ერთი ბრძანებით მართვა:  docker compose up -d --build
+# ბოტი ავტომატურად ეშვება, კრახის შემთხვევაში თავისით ირთვება.
+services:
+  flat-bot:
+    build: .
+    container_name: flat-bot
+    restart: unless-stopped
+    env_file: .env            # ტოკენი და პარამეტრები — ფაილი სერვერზე, არა git-ში
+    volumes:
+      - ./data:/data          # ბაზა host-ზე რჩება, გადატვირთვისას არ იშლება
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"       # ლოგები არ გაიბეროს
+        max-file: "3"

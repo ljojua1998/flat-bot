@@ -1,0 +1,15 @@
+# კონტეინერში არ უნდა მოხვდეს:
+.git
+.github
+.env
+.env.*
+!.env.example
+data/
+*.sqlite3
+*.sqlite3-*
+tracker.log
+__pycache__/
+*.pyc
+README.md
+DEPLOY.md
+tnet_letter.txt
