@@ -55,10 +55,17 @@ def main():
     load_env()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf8")
+    handlers = [logging.StreamHandler(sys.stdout)]   # Railway captures stdout as logs
+    try:
+        handlers.append(logging.FileHandler(os.path.join(HERE, "tracker.log"), encoding="utf8"))
+    except OSError:
+        pass   # read-only filesystem (some hosts) - stdout is enough
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s",
-                        handlers=[logging.StreamHandler(sys.stdout),
-                                  logging.FileHandler(os.path.join(HERE, "tracker.log"), encoding="utf8")])
-    db = DB(os.environ.get("DB_PATH", os.path.join(HERE, "data.sqlite3")))
+                        handlers=handlers)
+    # On Railway a mounted Volume keeps data across restarts; fall back to the project folder.
+    vol = os.environ.get("RAILWAY_VOLUME_MOUNT_PATH")
+    default_db = os.path.join(vol, "data.sqlite3") if vol else os.path.join(HERE, "data.sqlite3")
+    db = DB(os.environ.get("DB_PATH", default_db))
 
     if "--once" in sys.argv:
         t = Tracker(db)
