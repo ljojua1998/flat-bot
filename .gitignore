@@ -1,0 +1,4 @@
+.env
+data.sqlite3*
+tracker.log
+__pycache__/
